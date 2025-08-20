@@ -1,0 +1,13 @@
+Django==2.2.10
+django-crispy-forms==1.7.2
+pyresparser
+gunicorn
+spacy==2.3.5
+djangorestframework
+djangorestframework-simplejwt
+psycopg2-binary==2.8.6
+dj-database-url==0.5.0
+django-cors-headers
+django-filter
+Pillow
+nltk

@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  web:
+    build: ./resume_parser
+    command: sh -c "chmod +x /usr/src/app/entrypoint.sh && /usr/src/app/entrypoint.sh"
+    volumes:
+      - ./resume_parser/:/usr/src/app/
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    expose:
+      - "8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/resume_parser
+      - TZ=UTC
+    restart: always
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=resume_parser
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - TZ=UTC
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+      - ./ssl:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    restart: always
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

@@ -1,0 +1,1 @@
+default_app_config = 'parser_app.apps.ParserAppConfig'
